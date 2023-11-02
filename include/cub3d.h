@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:19:36 by kyacini           #+#    #+#             */
-/*   Updated: 2023/10/30 14:45:35 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/11/02 12:22:19 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,7 @@ char **error_treatment(int nb_params, char **params);
 char	**get_map(char *str);
 int	only_one(char *str);
 void	free_double_char(char **str);
+void check_params_map(char **map, t_params *game);
+int firstchar_position(char *str);
 
 #endif

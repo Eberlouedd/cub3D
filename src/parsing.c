@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:18:51 by kyacini           #+#    #+#             */
-/*   Updated: 2023/10/30 15:46:16 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/11/02 12:21:17 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	have_walls(char **str)
 	}
 	while (str[i])
 	{
-		if (str[i][0] != '1' || str[i][ft_strlen(str[i]) - 1] != '1')
+		if (str[i][firstchar_position(str[i])] != '1' || str[i][ft_strlen(str[i]) - 1] != '1')
 		{
 			write(1, "Error\nThe map need walls\n", 25);
 			return (0);
@@ -113,29 +113,51 @@ int	have_walls(char **str)
 
 int begin_line(char *str)
 {
-	return ((str[0] != 'N' && str[1] != 'O')
-		&& (str[0] != 'S' && str[1] != 'U')
-		&& (str[0] != 'W' && str[1] != 'E')
-		&& (str[0] != 'E' && str[1] != 'A')
-		&& str[0] != 'F' && str[0] != 'C');
+	return ((str[0] == 'N' && str[1] == 'O')
+		|| (str[0] == 'S' && str[1] == 'U')
+		|| (str[0] == 'W' && str[1] == 'E')
+		|| (str[0] == 'E' && str[1] == 'A')
+		|| str[0] == 'F' || str[0] == 'C');
 }
 
-void get_params_map(char **map, t_params *game)
+void check_params_map(char **map, t_params *game)
 {
 	int i;
-	char *stock;
+	char stock[6];
 
-	stock = "NSWEFC";
+	game->est = "o";
+	stock[0] = 'N';
+	stock[1] = 'S';
+	stock[2] = 'W';
+	stock[3] = 'E';
+	stock[4] = 'F';
+	stock[5] = 'C';
 	i = 0;
 	while (map[i])
 	{
 		if(!begin_line(map[i]) && !only_one(stock))
 		{
 			free_double_char(map);
-			write(1, "Error\nElements mistake\n", 24);
+			write(1, "Error\nElements mistake\n", 23);
 			exit(1);
 		}
-		else if()
+		else if(map[i][0] != 'N' && map[i][1] != 'O')
+			stock[0] = '1';
+		else if(map[i][0] != 'S' && map[i][1] != 'U')
+			stock[1] = '1';
+		else if(map[i][0] != 'W' && map[i][1] != 'E')
+			stock[2] = '1';
+		else if(map[i][0] != 'E' && map[i][1] != 'A')
+			stock[3] = '1';
+		else if(map[i][0] != 'C')
+			stock[5] = '1';
+		else if(map[i][0] != 'F')
+			stock[4] = '1';
+		else if (map[i][0] == '\n')
+		{
+			i++;
+			continue;
+		}
+		i++;
 	}
 }
-
