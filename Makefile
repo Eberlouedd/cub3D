@@ -6,7 +6,7 @@
 #    By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 12:13:37 by kyacini           #+#    #+#              #
-#    Updated: 2023/10/30 12:50:41 by kyacini          ###   ########.fr        #
+#    Updated: 2023/11/02 15:33:49 by kyacini          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ INC = include/
 
 RM = rm -rf
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall  -Wextra
 
 MLXFLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 

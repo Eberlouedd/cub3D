@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:18:51 by kyacini           #+#    #+#             */
-/*   Updated: 2023/11/02 12:21:17 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/11/02 16:21:51 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char **error_treatment(int nb_params, char **params)
 	map_test = get_map(params[1]);
 	if (map_test != NULL)
 	{
-		if(!have_walls(map_test))
+		if(!check_params_map(map_test) || !have_walls(map_test))
 		{
 			free_double_char(map_test);
 			return (NULL);
@@ -88,8 +88,8 @@ int	have_walls(char **str)
 {
 	int	i;
 
-	i = 0;
-	if (!only_one(str[0]))
+	i = 6;
+	if (!only_one(str[i]))
 	{
 		write(1, "Error\nThe map need walls\n", 25);
 		return (0);
@@ -113,19 +113,21 @@ int	have_walls(char **str)
 
 int begin_line(char *str)
 {
-	return ((str[0] == 'N' && str[1] == 'O')
-		|| (str[0] == 'S' && str[1] == 'U')
-		|| (str[0] == 'W' && str[1] == 'E')
-		|| (str[0] == 'E' && str[1] == 'A')
-		|| str[0] == 'F' || str[0] == 'C');
+	return ((str[0] == 'N' && str[1] == 'O' && str[2] == ' ')
+		|| (str[0] == 'S' && str[1] == 'U' && str[2] == ' ')
+		|| (str[0] == 'W' && str[1] == 'E' && str[2] == ' ')
+		|| (str[0] == 'E' && str[1] == 'A' && str[2] == ' ')
+		|| (str[0] == 'F' && str[1] == ' ')
+		|| (str[0] == 'C' && str[1] == ' '));
 }
 
-void check_params_map(char **map, t_params *game)
+int check_params_map(char **map)
 {
 	int i;
 	char stock[6];
+	int count;
+	int var;
 
-	game->est = "o";
 	stock[0] = 'N';
 	stock[1] = 'S';
 	stock[2] = 'W';
@@ -133,31 +135,79 @@ void check_params_map(char **map, t_params *game)
 	stock[4] = 'F';
 	stock[5] = 'C';
 	i = 0;
+	count = 0;
+	var = 0;
+
 	while (map[i])
 	{
-		if(!begin_line(map[i]) && !only_one(stock))
+		if((!begin_line(map[i]) && !only_one(stock)) || var)
+			return (write(1, "Error\nElements mistake\n", 23), 0);
+		else if(map[i][0] == 'N' && map[i][1] == 'O' && map[i][2] == ' ')
 		{
-			free_double_char(map);
-			write(1, "Error\nElements mistake\n", 23);
-			exit(1);
-		}
-		else if(map[i][0] != 'N' && map[i][1] != 'O')
+			count++;
 			stock[0] = '1';
-		else if(map[i][0] != 'S' && map[i][1] != 'U')
-			stock[1] = '1';
-		else if(map[i][0] != 'W' && map[i][1] != 'E')
-			stock[2] = '1';
-		else if(map[i][0] != 'E' && map[i][1] != 'A')
-			stock[3] = '1';
-		else if(map[i][0] != 'C')
-			stock[5] = '1';
-		else if(map[i][0] != 'F')
-			stock[4] = '1';
-		else if (map[i][0] == '\n')
-		{
-			i++;
-			continue;
 		}
+		else if(map[i][0] == 'S' && map[i][1] == 'U' && map[i][2] == ' ')
+		{
+			count++;
+			stock[1] = '1';
+		}
+		else if(map[i][0] == 'W' && map[i][1] == 'E' && map[i][2] == ' ')
+		{
+			count++;
+			stock[2] = '1';
+		}
+		else if(map[i][0] == 'E' && map[i][1] == 'A' && map[i][2] == ' ')
+		{
+			count++;
+			stock[3] = '1';
+		}
+		else if(map[i][0] == 'C' && map[i][1] == ' ')
+		{
+			count++;
+			stock[5] = '1';
+		}
+		else if(map[i][0] == 'F' && map[i][1] == ' ')
+		{
+			count++;
+			stock[4] = '1';
+		}
+		if(count > 6)
+			var = 1;
+		i++;
+	}
+	return (1);
+}
+
+void get_params_map(char **map, t_params *game)
+{
+	int i;
+	int buff;
+
+	i = 0;
+	while (map[i])
+	{
+		if(map[i][0] == 'N' && map[i][1] == 'O' && map[i][2] == ' ')
+			game->north = ft_substr(map[i], 3, ft_strlen(map[i]));
+		else if(map[i][0] == 'S' && map[i][1] == 'U' && map[i][2] == ' ')
+			game->south = ft_substr(map[i], 3, ft_strlen(map[i]));
+		else if(map[i][0] == 'W' && map[i][1] == 'E' && map[i][2] == ' ')
+			game->west = ft_substr(map[i], 3, ft_strlen(map[i]));
+		else if(map[i][0] == 'E' && map[i][1] == 'A' && map[i][2] == ' ')
+			game->east = ft_substr(map[i], 3, ft_strlen(map[i]));
+		else if(map[i][0] == 'C' && map[i][1] == ' ')
+			game->c_color = ft_substr(map[i], 2, ft_strlen(map[i]));
+		else if(map[i][0] == 'F' && map[i][1] == ' ')
+			game->f_color = ft_substr(map[i], 2, ft_strlen(map[i]));
+		i++;
+	}
+	buff = i - 6;
+	i = 0;
+	game->map = malloc(sizeof(char *) * (i + 1));
+	game->map[i] = NULL;
+	while (i < buff)
+	{
+		game->map[i] = map[i + 6];
 		i++;
 	}
 }
