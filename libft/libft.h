@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 16:59:58 by kyacini           #+#    #+#             */
-/*   Updated: 2022/12/21 17:29:00 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/11/19 23:50:04 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ char			*ft_strrejoin(int size, char **strs, char *sep, int start);
 char			*ft_strcat(char *dest, char *src);
 char			*ft_realloc(char *str, char c);
 int				ft_power2(int n);
+char			**ft_split_free(char *str, char c);
 
 #endif

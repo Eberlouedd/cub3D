@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:41:58 by kyacini           #+#    #+#             */
-/*   Updated: 2023/11/02 12:50:36 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/11/20 00:02:16 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,29 @@ void	free_double_char(char **str)
 	free(str);
 }
 
-int firstchar_position(char *str)
+int test_border_zero(char c)
 {
-	int i;
+	return c != '0' && c != '1'
+		&& c != 'N' && c != 'E'
+		&& c != 'W' && c != 'S';
+}
 
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != ' ')
-			return i;
-		i++;
-	}
-	return 0;
+void free_parsing_success(t_params *game)
+{
+	free(game->east);
+	free(game->north);
+	free(game->south);
+	free(game->west);
+	free_double_char(game->map);
+	free(game);
+}
+
+void free_parsing_failure(t_params *game)
+{
+	free(game->east);
+	free(game->north);
+	free(game->south);
+	free(game->west);
+	free(game->map);
+	free(game);
 }

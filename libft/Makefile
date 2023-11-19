@@ -6,7 +6,7 @@
 #    By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/03 16:45:59 by kyacini           #+#    #+#              #
-#    Updated: 2022/12/27 15:34:00 by kyacini          ###   ########.fr        #
+#    Updated: 2023/11/19 23:49:42 by kyacini          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,8 @@ SRC = ft_memset.c \
 		ft_strrejoin.c \
 		ft_strcat.c \
 		ft_realloc.c \
-		ft_power2.c
+		ft_power2.c \
+		ft_split_free.c 
 
 BONUS = ft_lstnew.c \
 		ft_lstadd_front.c \
