@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:23:51 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/07 23:40:18 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/10 16:33:39 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ int main(int argc, char **argv)
 	else
 		exit(EXIT_SUCCESS);
 	init_game_data(&rays);
-	rays.mlx = mlx_init();
-	make_window(game, &rays);
-	mlx_loop(rays.mlx);
+	game->mlx = mlx_init();
+	make_window(game);
+	mlx_hook(game->mlx_win, 2, 1L<<0, key_event, game);
+	mlx_loop(game->mlx);
+	
 	free_parsing_success(game);
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:19:36 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/08 00:12:19 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/10 15:16:44 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@ typedef struct s_params
     int c_color[3];
     int x;
     int y;
+	double real_x;
+	double real_y;
+	void *img;
+    void	*mlx;
+	void	*mlx_win;
 }	t_params;
 
 typedef struct s_data
 {
-    void	*mlx;
-	void	*mlx_win;
     double		posx; //position x du joueur
 	double		posy; //position y du joueur
 	double		dirx; //vecteur de direction (commence à -1 pour N, 1 pour S, 0 sinon)
@@ -53,8 +56,6 @@ typedef struct s_data
 	double		raydirx; //calcul de direction x du rayon
 	double		raydiry; //calcul de direction y du rayon
 	double		camerax; //point x sur la plan camera : Gauche ecran = -1, milieu = 0, droite = 1
-	int		mapx; // coordonée x du carré dans lequel est pos
-	int		mapy; // coordonnée y du carré dans lequel est pos
 	double		sidedistx; //distance que le rayon parcours jusqu'au premier point d'intersection vertical (=un coté x)
 	double		sidedisty; //distance que le rayon parcours jusqu'au premier point d'intersection horizontal (= un coté y)
 	double		deltadistx; //distance que rayon parcours entre chaque point d'intersection vertical
@@ -89,6 +90,7 @@ void count_stock_inc(int *c, char *s);
 void stock_var_init(char s[6], int *i, int *c, int *j);
 void count_var_i_inc(int c, int *v, int *i);
 void init_game_data(t_data *data);
-void make_window(t_params *game, t_data *data);
+void make_window(t_params *game);
+int	key_event(int keycode, t_params *game);
 
 #endif

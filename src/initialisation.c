@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 05:29:05 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/08 00:02:59 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/10 17:04:50 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,15 @@ void init_game_data(t_data *data)
     data->plany = 0.66;
 }
 
-void make_window(t_params *game, t_data *data)
+void make_window(t_params *game)
 {
     int i;
     int j;
     void *img;
-    void *img_wall;
     char *img_data;
-    char *img_data_wall;
     int bpp;
-    int bpp_wall;
     int size_line;
-    int size_line_wall;
     int endian;
-    int endian_wall;
     int color = 0xFF0000;
     int color_wall = 0xFFFFFF;
     
@@ -40,42 +35,36 @@ void make_window(t_params *game, t_data *data)
     {
         i++;
     }
-	data->mlx_win = mlx_new_window(data->mlx, ft_strlen(game->map[0]) * 20, i * 20, "Cub3D");
-    img = mlx_new_image(data->mlx, 10, 10);
-    img_wall = mlx_new_image(data->mlx, 20, 20);
+	game->mlx_win = mlx_new_window(game->mlx, ft_strlen(game->map[0]) * 20, i * 20, "Cub3D");
+    img = mlx_new_image(game->mlx, ft_strlen(game->map[0]) * 20, i * 20);
     img_data = mlx_get_data_addr(img, &bpp, &size_line, &endian);
-    img_data_wall = mlx_get_data_addr(img_wall, &bpp_wall, &size_line_wall, &endian_wall);
-    for (int y = 0; y < 10; y++)
+    for (int y = 0; y < i * 20; y++)
     {
-        for (int x = 0; x < 10; x++)
+        for (int x = 0; x < ft_strlen(game->map[0]) * 20; x++)
         {
             int index = x * (bpp / 8) + y * size_line;
-            *(int*)(img_data + index) = color;
+            if(game->map[y / 20][x / 20] == '1')
+                *(int*)(img_data + index) = color_wall;
+            else if(game->map[y / 20][x / 20] == 'N')
+                *(int*)(img_data + index) = color;
         }
     }
-    for (int y = 0; y < 20; y++)
-    {
-        for (int x = 0; x < 20; x++)
-        {
-            int index = x * (bpp_wall / 8) + y * size_line_wall;
-            *(int*)(img_data_wall + index) = color_wall;
-        }
+    game->img = img;
+    mlx_put_image_to_window(game->mlx, game->mlx_win, img, 0, 0);
+}
+
+int	key_event(int keycode, t_params *game)
+{
+	if (keycode == FORWARD_W_Z)
+	{
+        game->real_y -= 1;
+        mlx_put_image_to_window(game->mlx, game->mlx_win, game->img, game->real_x, game->real_y);
     }
-    i = 0;
-    j = 0;
-    while (game->map[i])
-    {
-        while (game->map[i][j])
-        {
-            if(game->map[i][j] == '1')
-                mlx_put_image_to_window(data->mlx, data->mlx_win, img_wall, j*20, i*20);
-            else if (game->map[i][j] == 'N')
-            {
-                mlx_put_image_to_window(data->mlx, data->mlx_win, img, j*20 + 10, i*20 + 10);
-            }
-            j++;
-        }
-        j = 0;
-        i++;
-    }
+	// else if (keycode == LEFT_A_Q)
+	// 	move_images(game, LEFT_A_Q);
+	// else if (keycode == RIGHT_D_D)
+	// 	move_images(game, RIGHT_D_D);
+	// else if (keycode == BACK_S_S)
+	// 	move_images(game, BACK_S_S);
+	return (0);
 }
