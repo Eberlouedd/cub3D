@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 05:29:05 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/10 17:04:50 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/10 17:26:58 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	key_event(int keycode, t_params *game)
 	if (keycode == FORWARD_W_Z)
 	{
         game->real_y -= 1;
-        mlx_put_image_to_window(game->mlx, game->mlx_win, game->img, game->real_x, game->real_y);
+        mlx_put_image_to_window(game->mlx, game->mlx_win, game->img, 0, 0);
     }
 	// else if (keycode == LEFT_A_Q)
 	// 	move_images(game, LEFT_A_Q);
