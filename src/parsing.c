@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:18:51 by kyacini           #+#    #+#             */
-/*   Updated: 2023/11/20 00:30:50 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/07 13:41:59 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,34 +40,6 @@ char	**get_map(char *str)
 	return (NULL);
 }
 
-int error_treatment(int nb_params, char **params, t_params *game)
-{
-	char	**map_test;
-
-	if (nb_params != 2)
-	{
-		write(1, "Error\nWrong parameters\n", 23);
-		return 0;
-	}
-	check_extension(params[1]);
-	map_test = get_map(params[1]);
-	if (map_test != NULL)
-	{
-		if(!check_params_map(map_test) || !have_walls(map_test) || !check_elements(map_test))
-		{
-			free(game);
-			free_double_char(map_test);
-			return 0;
-		}
-	}
-	else
-	{
-		write(1, "Error\nCan't read file\n", 22);
-		return 0;
-	}
-	return(get_params_map(map_test, game));
-}
-
 void	check_extension(char *str)
 {
 	int	size;
@@ -82,75 +54,6 @@ void	check_extension(char *str)
 	write(1, "Error\n", 6);
 	write(1, "Wrong extension\n", 16);
 	exit(1);
-}
-
-int check_elements(char **str)
-{
-	int i;
-	int j;
-	int c;
-
-	i = 6;
-	j = 6;
-	c = 0;
-	while (str[i])
-	{
-		while (str[i][j])
-		{
-			if(str[i][j] == 'N' || str[i][j] == 'S'
-			|| str[i][j] == 'W' || str[i][j] == 'E')
-				c++;
-			else if(str[i][j] != '0' && str[i][j] != '1'
-				&& str[i][j] != ' ')
-			{
-				write(1, "Error\nWrong block\n", 18);
-				return (0);
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	if (c == 0 || c > 1)
-	{
-		write(1, "Error\nOne character allowed\n", 28);
-		return (0);
-	}
-	return (1);
-}
-
-int	have_walls(char **str)
-{
-	int	i;
-	int j;
-
-	i = 6;
-	j = 0;
-	while (str[i])
-	{
-		while (str[i][j])
-		{
-			if ((str[i][j] == '0' && j == 0) || (str[i][j] == '0' && i == 6))
-			{
-				printf("%c %d %d", str[i][j], i, j);
-				write(1, "Error\nThe map need walls\n", 25);
-				return (0);
-			}
-			else if(str[i][j] == '0' || str[i][j] == 'N'
-				|| str[i][j] == 'S' || str[i][j] == 'E' || str[i][j] == 'W')
-			{
-				if (test_border_zero(str[i - 1][j]) || test_border_zero(str[i + 1][j]))
-				{
-					write(1, "Error\nThe map need walls\n", 25);
-					return (0);
-				}
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return (1);
 }
 
 int begin_line(char *str)
@@ -170,52 +73,24 @@ int check_params_map(char **map)
 	int count;
 	int var;
 
-	stock[0] = 'N';
-	stock[1] = 'S';
-	stock[2] = 'W';
-	stock[3] = 'E';
-	stock[4] = 'F';
-	stock[5] = 'C';
-	i = 0;
-	count = 0;
-	var = 0;
+	stock_var_init(stock, &i, &var, &count);
 	while (map[i])
 	{
 		if((!begin_line(map[i]) && !only_one(stock)) || var)
 			return (write(1, "Error\nElements mistake\n", 23), 0);
 		else if(map[i][0] == 'N' && map[i][1] == 'O' && map[i][2] == ' ')
-		{
-			count++;
-			stock[0] = '1';
-		}
+			count_stock_inc(&count, &stock[0]);
 		else if(map[i][0] == 'S' && map[i][1] == 'O' && map[i][2] == ' ')
-		{
-			count++;
-			stock[1] = '1';
-		}
+			count_stock_inc(&count, &stock[1]);
 		else if(map[i][0] == 'W' && map[i][1] == 'E' && map[i][2] == ' ')
-		{
-			count++;
-			stock[2] = '1';
-		}
+			count_stock_inc(&count, &stock[2]);
 		else if(map[i][0] == 'E' && map[i][1] == 'A' && map[i][2] == ' ')
-		{
-			count++;
-			stock[3] = '1';
-		}
+			count_stock_inc(&count, &stock[3]);
 		else if(map[i][0] == 'C' && map[i][1] == ' ')
-		{
-			count++;
-			stock[5] = '1';
-		}
+			count_stock_inc(&count, &stock[5]);
 		else if(map[i][0] == 'F' && map[i][1] == ' ')
-		{
-			count++;
-			stock[4] = '1';
-		}
-		if(count > 6)
-			var = 1;
-		i++;
+			count_stock_inc(&count, &stock[4]);
+		count_var_i_inc(count, &var, &i);
 	}
 	return (1);
 }
@@ -259,10 +134,7 @@ int get_params_map(char **map, t_params *game)
 		i++;
 	}
 	if(i != 3)
-	{
-		write(1, "Error\nProbleme with colors\n", 27);
-		return 0;
-	}
+		return (write(1, "Error\nProbleme with colors\n", 27), 0);
 	i = 0;
 	while (i < buff)
 	{
@@ -272,5 +144,7 @@ int get_params_map(char **map, t_params *game)
 	free_double_char(cc);
 	free_double_char(fc);
 	free_double_char(map);
+	if(!search_xy(game))
+		return(write(1, "Error\nOne character\n", 20), 0);
 	return (1);
 }

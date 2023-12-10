@@ -6,18 +6,24 @@
 #    By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 12:13:37 by kyacini           #+#    #+#              #
-#    Updated: 2023/11/02 15:33:49 by kyacini          ###   ########.fr        #
+#    Updated: 2023/12/07 13:48:43 by kyacini          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC =	src/main.c \
 		src/parsing.c \
 		src/utils.c \
+		src/error.c \
+		src/norm.c \
+		src/initialisation.c \
 		gnl/get_next_line.c \
 		gnl/get_next_line_utils.c \
 
 OBJS =	objs/main.o \
 		objs/utils.o\
+		objs/error.o\
+		objs/norm.o\
+		objs/initialisation.o\
 		objs/parsing.o\
 		gnl/get_next_line.o\
 		gnl/get_next_line_utils.o\
