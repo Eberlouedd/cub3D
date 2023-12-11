@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:19:36 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/10 15:16:44 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/11 22:17:40 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #define BACK_S_S 115
 #define RIGHT_D_D 100
 #define LEFT_A_Q 113
+#define PI 3.1415926535
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -25,6 +26,7 @@
 # include "../gnl/get_next_line.h"
 # include "../mlx_linux/mlx.h"
 # include "/usr/include/X11/X.h"
+# include <math.h>
 
 
 typedef struct s_params
@@ -43,14 +45,16 @@ typedef struct s_params
 	void *img;
     void	*mlx;
 	void	*mlx_win;
+	double		dirx;
+	double		diry;
+	double angle;
 }	t_params;
 
 typedef struct s_data
 {
     double		posx; //position x du joueur
 	double		posy; //position y du joueur
-	double		dirx; //vecteur de direction (commence à -1 pour N, 1 pour S, 0 sinon)
-	double		diry; //vecteur de direction (commence à -1 pour W, 1 pour E, 0 sinon)
+	 //vecteur de direction (commence à -1 pour W, 1 pour E, 0 sinon)
 	double		planx; //vecteur du plan (commence à 0.66 pour E, -0.66 pour W, 0 sinon)
 	double		plany; //vecteur du plan (commence à 0.66 pour N, -0.66 pour S, 0 sinon)
 	double		raydirx; //calcul de direction x du rayon
