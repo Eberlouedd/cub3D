@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:19:36 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/11 22:17:40 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/22 10:01:19 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,16 @@
 # include <math.h>
 
 
+typedef struct s_texture{
+	void	*img_text;
+	int		width;
+	int		height;
+	int		*data_img_text;
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+}	t_texture;
+
 typedef struct s_params
 {
     char *north;
@@ -42,38 +52,45 @@ typedef struct s_params
     int y;
 	double real_x;
 	double real_y;
-	void *img;
     void	*mlx;
 	void	*mlx_win;
 	double		dirx;
 	double		diry;
-	double angle;
-}	t_params;
-
-typedef struct s_data
-{
-    double		posx; //position x du joueur
-	double		posy; //position y du joueur
-	 //vecteur de direction (commence à -1 pour W, 1 pour E, 0 sinon)
-	double		planx; //vecteur du plan (commence à 0.66 pour E, -0.66 pour W, 0 sinon)
-	double		plany; //vecteur du plan (commence à 0.66 pour N, -0.66 pour S, 0 sinon)
 	double		raydirx; //calcul de direction x du rayon
 	double		raydiry; //calcul de direction y du rayon
-	double		camerax; //point x sur la plan camera : Gauche ecran = -1, milieu = 0, droite = 1
-	double		sidedistx; //distance que le rayon parcours jusqu'au premier point d'intersection vertical (=un coté x)
-	double		sidedisty; //distance que le rayon parcours jusqu'au premier point d'intersection horizontal (= un coté y)
+	double		camerax;
 	double		deltadistx; //distance que rayon parcours entre chaque point d'intersection vertical
-	double		deltadisty; //distance que le rayon parcours entre chaque point d'intersection horizontal
+	double		deltadisty;
+	double		planx; //vecteur du plan (commence à 0.66 pour E, -0.66 pour W, 0 sinon)
+	double		plany;
+	double		sidedistx; //distance que le rayon parcours jusqu'au premier point d'intersection vertical (=un coté x)
+	double		sidedisty;
 	int		stepx; // -1 si doit sauter un carre dans direction x negative, 1 dans la direction x positive
-	int		stepy; // -1 si doit sauter un carre dans la direction y negative, 1 dans la direction y positive
-	int		hit; // 1 si un mur a ete touche, 0 sinon
-	int		side; // 0 si c'est un cote x qui est touche (vertical), 1 si un cote y (horizontal)
-	double		perpwalldist; // distance du joueur au mur
+	int		stepy;
+	double		perpwalldist;
+	int		hit;
+	int		side;
 	int		lineheight; //hauteur de la ligne a dessiner
 	int		drawstart; //position de debut ou il faut dessiner
-	int		drawend; //position de fin ou il faut dessiner
-	int		x;
-} t_data;
+	int		drawend;
+	void 	*main_img;
+	int 	*img_data;
+    int 	bits_per_pixel;
+    int 	size_line;
+    int 	endian;
+	double	speed;
+	double	rotation;
+	double wall;
+	double			step;
+	t_texture		*texture_north;
+	t_texture		*texture_south;
+	t_texture		*texture_east;
+	t_texture		*texture_west;
+
+	int				texX;
+	int				texY;
+	double			texPos;
+}	t_params;
 
 
 int	have_walls(char **str);
@@ -93,8 +110,13 @@ int	check_nl(char *str);
 void count_stock_inc(int *c, char *s);
 void stock_var_init(char s[6], int *i, int *c, int *j);
 void count_var_i_inc(int c, int *v, int *i);
-void init_game_data(t_data *data);
-void make_window(t_params *game);
-int	key_event(int keycode, t_params *game);
+void init_game_data(t_params *game);
+int make_window(t_params *game);
+void	raycasting_loop(t_params *game);
+void	raycasting_init(t_params *game, int x);
+void	get_firstdist(t_params *game);
+void	get_dist(t_params *game);
+void	init_image(t_params *game, int mid, int x);
+void	load_images(t_params *game);
 
 #endif

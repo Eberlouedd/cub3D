@@ -6,7 +6,7 @@
 #    By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 12:13:37 by kyacini           #+#    #+#              #
-#    Updated: 2023/12/07 13:48:43 by kyacini          ###   ########.fr        #
+#    Updated: 2023/12/22 09:54:27 by kyacini          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,9 @@ SRC =	src/main.c \
 		src/utils.c \
 		src/error.c \
 		src/norm.c \
+		src/loader.c \
+		src/raycasting.c \
+		src/image.c \
 		src/initialisation.c \
 		gnl/get_next_line.c \
 		gnl/get_next_line_utils.c \
@@ -23,6 +26,9 @@ OBJS =	objs/main.o \
 		objs/utils.o\
 		objs/error.o\
 		objs/norm.o\
+		objs/loader.o\
+		objs/raycasting.o \
+		objs/image.o \
 		objs/initialisation.o\
 		objs/parsing.o\
 		gnl/get_next_line.o\

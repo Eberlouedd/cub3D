@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 03:36:03 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/02 04:33:40 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/22 13:10:31 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int search_xy(t_params *game)
 			if((game->map[i][j] == 'S' || game->map[i][j] == 'N'
 				|| game->map[i][j] == 'W' || game->map[i][j] == 'E') && buff == 0)
 			{
-				game->x = j;
-				game->y = i;
+				game->x = i;
+				game->y = j;
 				buff = 1;
 			}
 			else if((game->map[i][j] == 'S' || game->map[i][j] == 'N'
