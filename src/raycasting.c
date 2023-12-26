@@ -6,13 +6,13 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 09:15:52 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/22 14:21:14 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/23 02:20:36 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	raycasting_init(t_params *game, int x)
+void	init_params(t_params *game, int x)
 {
 	game->camerax = 2 * x / (double)600 - 1;
 	game->raydirx = game->dirx + game->planx * game->camerax;
@@ -31,7 +31,7 @@ void	raycasting_init(t_params *game, int x)
 				/ (game->raydiry * game->raydiry));
 }
 
-void	get_firstdist(t_params *game)
+void	initialize_ray_step(t_params *game)
 {
 	if (game->raydirx < 0)
 	{
@@ -59,7 +59,7 @@ void	get_firstdist(t_params *game)
 	}
 }
 
-void	get_dist(t_params *game)
+void	calculate_wall_distance(t_params *game)
 {
 	game->hit = 0;
 	game->perpwalldist = 0;
@@ -88,12 +88,12 @@ void	get_dist(t_params *game)
 					+ (1 - (double)game->stepy) / 2) / game->raydiry);
 }
 
-unsigned long	creatergb(int r, int g, int b)
+unsigned long	translate_color(int r, int g, int b)
 {
 	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
 }
 
-void draw_game(t_params *game, int x)
+void	render_column(t_params *game, int x)
 {
 	int	mid;
 
@@ -108,27 +108,13 @@ void draw_game(t_params *game, int x)
 	game->drawend = 450 - game->drawstart;
 	while (++mid < game->drawstart)
 		game->img_data[mid * game->size_line / 4
-			+ x] = creatergb(game->c_color[0], game->c_color[1], game->c_color[2]);
+			+ x] = translate_color(game->c_color[0], game->c_color[1],
+				game->c_color[2]);
 	if (mid <= game->drawend)
-		init_image(game, mid, x);
+		configure_wall_texture(game, mid, x);
 	mid = game->drawend;
 	while (++mid < 450)
 		game->img_data[mid * game->size_line / 4
-			+ x] = creatergb(game->f_color[0], game->f_color[1], game->f_color[2]);
-}
-
-void	raycasting_loop(t_params *game)
-{
-	int	x;
-
-	x = 0;
-
-	while (x < 600)
-	{
-		raycasting_init(game, x);
-		get_firstdist(game);
-		get_dist(game);
-		draw_game(game, x);
-		x++;
-	}
+			+ x] = translate_color(game->f_color[0], game->f_color[1],
+				game->f_color[2]);
 }

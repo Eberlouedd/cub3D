@@ -6,44 +6,35 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 03:36:03 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/22 13:10:31 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/26 21:22:28 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int error_treatment(int nb_params, char **params, t_params *game)
+int	error_treatment(int nb_params, char **params, t_params *game)
 {
 	char	**map_test;
 
 	if (nb_params != 2)
-	{
-		write(1, "Error\nWrong parameters\n", 23);
-		return 0;
-	}
-	check_extension(params[1]);
+		return (write(1, "Error\nWrong parameters\n", 23), 0);
+	check_extension(params[1], game);
 	map_test = get_map(params[1]);
 	if (map_test != NULL)
 	{
-		if(!check_params_map(map_test) || !have_walls(map_test) || !check_elements(map_test))
-		{
-			free(game);
-			free_double_char(map_test);
-			return 0;
-		}
+		if (!check_params_map(map_test) || !have_walls(map_test)
+			|| !check_elements(map_test))
+			return (free(game), free_double_char(map_test), 0);
 	}
 	else
-	{
-		write(1, "Error\nCan't read file\n", 22);
-		return 0;
-	}
-	return(get_params_map(map_test, game));
+		return (free(game), write(1, "Error\nEmpty file\n", 17), 0);
+	return (get_params_map(map_test, game));
 }
 
 int	have_walls(char **str)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 6;
 	j = 0;
@@ -51,14 +42,8 @@ int	have_walls(char **str)
 	{
 		while (str[i][j])
 		{
-			if ((str[i][j] == '0' && j == 0) || (str[i][j] == '0' && i == 6))
+			if (!check_walls(str, i, j))
 				return (write(1, "Error\nThe map need walls\n", 25), 0);
-			else if(str[i][j] == '0' || str[i][j] == 'N'
-				|| str[i][j] == 'S' || str[i][j] == 'E' || str[i][j] == 'W')
-			{
-				if (test_border_zero(str[i - 1][j]) || test_border_zero(str[i + 1][j]))
-					return (write(1, "Error\nThe map need walls\n", 25), 0);
-			}
 			j++;
 		}
 		j = 0;
@@ -67,11 +52,11 @@ int	have_walls(char **str)
 	return (1);
 }
 
-int search_xy(t_params *game)
+int	search_xy(t_params *game)
 {
-	int i;
-	int j;
-	int buff;
+	int	i;
+	int	j;
+	int	buff;
 
 	i = 0;
 	j = 0;
@@ -80,41 +65,39 @@ int search_xy(t_params *game)
 	{
 		while (game->map[i][j])
 		{
-			if((game->map[i][j] == 'S' || game->map[i][j] == 'N'
-				|| game->map[i][j] == 'W' || game->map[i][j] == 'E') && buff == 0)
-			{
-				game->x = i;
-				game->y = j;
-				buff = 1;
-			}
-			else if((game->map[i][j] == 'S' || game->map[i][j] == 'N'
-				|| game->map[i][j] == 'W' || game->map[i][j] == 'E') && buff == 1)
-				return 0;
+			if ((game->map[i][j] == 'S' || game->map[i][j] == 'N'
+				|| game->map[i][j] == 'W' || game->map[i][j] == 'E')
+					&& buff == 0)
+				affect_position(game, i, j, &buff);
+			else if ((game->map[i][j] == 'S' || game->map[i][j] == 'N'
+				|| game->map[i][j] == 'W'
+					|| game->map[i][j] == 'E') && buff == 1)
+				return (write(1, "Error\nOne character\n", 20), 0);
 			j++;
 		}
 		j = 0;
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
-int check_elements(char **str)
+int	check_elements(char **str)
 {
-	int i;
-	int j;
-	int c;
+	int	i;
+	int	j;
+	int	c;
 
 	i = 6;
-	j = 6;
+	j = 0;
 	c = 0;
 	while (str[i])
 	{
 		while (str[i][j])
 		{
-			if(str[i][j] == 'N' || str[i][j] == 'S'
+			if (str[i][j] == 'N' || str[i][j] == 'S'
 			|| str[i][j] == 'W' || str[i][j] == 'E')
 				c++;
-			else if(str[i][j] != '0' && str[i][j] != '1'
+			else if (str[i][j] != '0' && str[i][j] != '1'
 				&& str[i][j] != ' ')
 				return (write(1, "Error\nWrong block\n", 18), 0);
 			j++;
@@ -123,7 +106,7 @@ int check_elements(char **str)
 		i++;
 	}
 	if (c == 0 || c > 1)
-		return (write(1, "Error\nOne character allowed\n", 28), 0);
+		return (write(1, "Error\nOne character please\n", 28), 0);
 	return (1);
 }
 
@@ -133,21 +116,25 @@ int	check_nl(char *str)
 	char	mem;
 	int		fd;
 	int		num;
+	int		switcher;
 
+	switcher = 0;
 	fd = open(str, O_RDONLY);
+	if (fd == -1)
+		return (write(1, "Error\nCan't read file\n", 22), 0);
 	num = 0;
 	buff[1] = '\0';
 	read(fd, buff, 1);
+	mem = buff[0];
 	while (read(fd, buff, 1))
 	{
 		if (buff[0] == '\n' && mem == '\n' && num >= 7)
-			return (write(1, "Error\nProbleme with a new line\n", 31), 0);
-		if(mem != '\n' && buff[0] == '\n')
+			switcher = 1;
+		if (mem != '\n' && buff[0] == '\n')
 			num++;
+		if (buff[0] != '\n' && switcher)
+			return (write(1, "Error\nThe map need to be last\n", 30), 0);
 		mem = buff[0];
 	}
-	if (buff[0] == '\n')
-		return (0);
-	close(fd);
-	return (1);
+	return (close(fd), 1);
 }

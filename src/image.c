@@ -6,63 +6,64 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 18:29:34 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/22 14:18:16 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/12/26 21:37:17 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	tex_loop(t_params *game, int mid, int x, t_texture *t)
+void	apply_texture_to_column(t_params *game, int mid, int x, t_texture *t)
 {
 	game->step = 1.0 * game->texture_north->height / game->lineheight;
-	game->texPos = (game->drawstart - 450 / 2 + game->lineheight / 2) * game->step;
+	game->tex_pos = (game->drawstart - 450 / 2
+			+ game->lineheight / 2) * game->step;
 	while (mid <= game->drawend)
 	{
-		game->texY = (int)game->texPos &(t->height - 1);
-		game->texPos += game->step;
+		game->tex_y = (int)game->tex_pos &(t->height - 1);
+		game->tex_pos += game->step;
 		if (mid < 450 && x < 600)
-			game->img_data[mid * game->size_line / 4 + x] = t->data_img_text[game->texY
-				* t->size_line / 4 + game->texX];
+			game->img_data[mid * game->size_line / 4 + x]
+				= t->data_img_text[game->tex_y
+				* t->size_line / 4 + game->tex_x];
 		mid += 1;
 	}
 }
 
-//wallx : coordonnée sur x de la colonne que l'on veut utiliser
-//tex : coordonnée sur x dans la texture
-void	init_imagep1(t_params *game)
+void	calculate_wall_hitpoint(t_params *game)
 {
 	if (game->side == 1)
-		game->wall = game->real_y + ((game->y - game->real_y + (1 - game->stepy) / 2)
+		game->wall = game->real_x + ((game->y - game->real_y
+					+ (1 - game->stepy) / 2)
 				/ game->raydiry) * game->raydirx;
 	else
-		game->wall = game->real_x + ((game->x - game->real_x + (1 - game->stepx) / 2)
+		game->wall = game->real_y + ((game->x - game->real_x
+					+ (1 - game->stepx) / 2)
 				/game->raydirx) * game->raydiry;
 	game->wall -= floor(game->wall);
 }
 
-void	init_image(t_params *game, int mid, int x)
+void	configure_wall_texture(t_params *game, int mid, int x)
 {
-	init_imagep1(game);
+	calculate_wall_hitpoint(game);
 	if (game->side == 0 && game->raydirx >= 0)
 	{
-		game->texX = (int)(game->wall * game->texture_south->width);
-		game->texX = game->texture_south->width - game->texX - 1;
-		tex_loop(game, mid, x, game->texture_south);
+		game->tex_x = (int)(game->wall * game->texture_south->width);
+		game->tex_x = game->texture_south->width - game->tex_x - 1;
+		apply_texture_to_column(game, mid, x, game->texture_south);
 	}
 	else if (game->side == 0 && game->raydirx < 0)
 	{
-		game->texX = (int)(game->wall * game->texture_north->width);
-		game->texX = game->texture_north->width - game->texX - 1;
-		tex_loop(game, mid, x, game->texture_north);
+		game->tex_x = (int)(game->wall * game->texture_north->width);
+		apply_texture_to_column(game, mid, x, game->texture_north);
 	}
 	else if (game->side == 1 && game->raydiry < 0)
 	{
-		game->texX = (int)(game->wall * game->texture_west->width);
-		tex_loop(game, mid, x, game->texture_west);
+		game->tex_x = (int)(game->wall * game->texture_west->width);
+		apply_texture_to_column(game, mid, x, game->texture_west);
 	}
 	else if (game->side == 1 && game->raydiry >= 0)
 	{
-		game->texX = (int)(game->wall * game->texture_east->width);
-		tex_loop(game, mid, x, game->texture_east);
+		game->tex_x = (int)(game->wall * game->texture_east->width);
+		apply_texture_to_column(game, mid, x, game->texture_east);
 	}
 }
