@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 04:32:25 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/23 03:28:31 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 13:13:49 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int	create_map(t_params *game, char **fc, char **cc, char **map)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	game->map = malloc(sizeof(char *) * (game->buff + 1));
 	game->map[game->buff] = NULL;
-	while (fc[i] && cc[i] && i < 3)
+	while (++i < 3 && fc[i] && cc[i])
 	{
 		game->f_color[i] = ft_atoi(fc[i]);
 		game->c_color[i] = ft_atoi(cc[i]);
@@ -61,15 +61,13 @@ int	create_map(t_params *game, char **fc, char **cc, char **map)
 			return (free_double_char(map), free_double_char(cc),
 				free_double_char(fc), free_parsing_failure(game),
 				write(1, "Error\nProbleme with colors\n", 27), 0);
-		i++;
 	}
 	if (i != 3)
-		return (write(1, "Error\nProbleme with colors\n", 27), 0);
-	i = 0;
-	while (i < game->buff)
-	{
+		return (free_double_char(map), free_double_char(cc),
+			free_double_char(fc), free_parsing_failure(game),
+			write(1, "Error\nProbleme with colors\n", 27), 0);
+	i = -1;
+	while (++i < game->buff)
 		game->map[i] = ft_strdup(map[i + 6]);
-		i++;
-	}
 	return (free_buffers(fc, cc, map), search_xy(game));
 }

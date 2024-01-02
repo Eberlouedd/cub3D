@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 03:36:03 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/26 21:22:28 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 13:22:59 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	error_treatment(int nb_params, char **params, t_params *game)
 	map_test = get_map(params[1]);
 	if (map_test != NULL)
 	{
-		if (!check_params_map(map_test) || !have_walls(map_test)
-			|| !check_elements(map_test))
+		if (!check_params_map(map_test) || !check_elements(map_test)
+			|| !have_walls(map_test))
 			return (free(game), free_double_char(map_test), 0);
 	}
 	else
