@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 15:48:41 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/26 21:18:34 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:26:46 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ int	key_event(int key, t_params *game)
 	if (key == ROTATE_LEFT)
 		rotate(game, 1);
 	if (key == ESC)
-	{
 		exit_game("", game);
-		exit(0);
-	}
 	return (0);
 }
 

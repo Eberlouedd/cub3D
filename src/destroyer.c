@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 22:01:16 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/23 23:42:34 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:26:01 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	exit_game(char *error, t_params *game)
 		free(game->mlx);
 	}
 	free(game);
+	exit(1);
 }
 
 void	destroy_texture(t_params *game, t_texture *t, void *img)

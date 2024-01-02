@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 03:36:03 by kyacini           #+#    #+#             */
-/*   Updated: 2024/01/02 13:22:59 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:28:21 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	error_treatment(int nb_params, char **params, t_params *game)
 	char	**map_test;
 
 	if (nb_params != 2)
-		return (write(1, "Error\nWrong parameters\n", 23), 0);
+		return (write(2, "Error\nWrong parameters\n", 23), 0);
 	check_extension(params[1], game);
 	map_test = get_map(params[1]);
 	if (map_test != NULL)
@@ -27,7 +27,7 @@ int	error_treatment(int nb_params, char **params, t_params *game)
 			return (free(game), free_double_char(map_test), 0);
 	}
 	else
-		return (free(game), write(1, "Error\nEmpty file\n", 17), 0);
+		return (free(game), write(2, "Error\nEmpty file\n", 17), 0);
 	return (get_params_map(map_test, game));
 }
 
@@ -43,7 +43,7 @@ int	have_walls(char **str)
 		while (str[i][j])
 		{
 			if (!check_walls(str, i, j))
-				return (write(1, "Error\nThe map need walls\n", 25), 0);
+				return (write(2, "Error\nThe map need walls\n", 25), 0);
 			j++;
 		}
 		j = 0;
@@ -72,7 +72,7 @@ int	search_xy(t_params *game)
 			else if ((game->map[i][j] == 'S' || game->map[i][j] == 'N'
 				|| game->map[i][j] == 'W'
 					|| game->map[i][j] == 'E') && buff == 1)
-				return (write(1, "Error\nOne character\n", 20), 0);
+				return (write(2, "Error\nOne character\n", 20), 0);
 			j++;
 		}
 		j = 0;
@@ -99,14 +99,14 @@ int	check_elements(char **str)
 				c++;
 			else if (str[i][j] != '0' && str[i][j] != '1'
 				&& str[i][j] != ' ')
-				return (write(1, "Error\nWrong block\n", 18), 0);
+				return (write(2, "Error\nWrong block\n", 18), 0);
 			j++;
 		}
 		j = 0;
 		i++;
 	}
 	if (c == 0 || c > 1)
-		return (write(1, "Error\nOne character please\n", 28), 0);
+		return (write(2, "Error\nOne character please\n", 28), 0);
 	return (1);
 }
 
@@ -121,7 +121,7 @@ int	check_nl(char *str)
 	switcher = 0;
 	fd = open(str, O_RDONLY);
 	if (fd == -1)
-		return (write(1, "Error\nCan't read file\n", 22), 0);
+		return (write(2, "Error\nCan't read file\n", 22), 0);
 	num = 0;
 	buff[1] = '\0';
 	read(fd, buff, 1);
@@ -133,7 +133,7 @@ int	check_nl(char *str)
 		if (mem != '\n' && buff[0] == '\n')
 			num++;
 		if (buff[0] != '\n' && switcher)
-			return (write(1, "Error\nThe map need to be last\n", 30), 0);
+			return (write(2, "Error\nThe map need to be last\n", 30), 0);
 		mem = buff[0];
 	}
 	return (close(fd), 1);

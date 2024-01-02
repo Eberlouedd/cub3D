@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:34:47 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/23 03:44:39 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:30:43 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ int	setup_wall_textures(t_params *game)
 			game->north,
 			&(game->texture_north->width), &(game->texture_north->height));
 	if (!game->texture_north->img_text)
-		return (exit_game("Error\nCan't load north texture\n", game), exit(1), 1);
+		return (exit_game("Error\nCan't load north texture\n", game), 1);
 	game->texture_south->img_text = mlx_xpm_file_to_image(game->mlx,
 			game->south,
 			&(game->texture_south->width), &(game->texture_south->height));
 	if (!game->texture_south->img_text)
-		return (exit_game("Error\nCan't load south texture\n", game), exit(1), 1);
+		return (exit_game("Error\nCan't load south texture\n", game), 1);
 	game->texture_east->img_text = mlx_xpm_file_to_image(game->mlx, game->east,
 			&(game->texture_east->width), &(game->texture_east->height));
 	if (!game->texture_east->img_text)
-		return (exit_game("Error\nCan't load east texture\n", game), exit(1), 1);
+		return (exit_game("Error\nCan't load east texture\n", game), 1);
 	game->texture_west->img_text = mlx_xpm_file_to_image(game->mlx,
 			game->west, &(game->texture_west->width),
 			&(game->texture_west->height));
 	if (!game->texture_west->img_text)
-		return (exit_game("Error\nCan't load west texture\n", game), exit(1), 1);
+		return (exit_game("Error\nCan't load west texture\n", game), 1);
 	initialize_texture_data(game);
 	return (0);
 }
@@ -64,12 +64,20 @@ int	setup_wall_textures(t_params *game)
 void	initialize_texture_resources(t_params *game)
 {
 	game->texture_north = malloc(sizeof(t_texture));
+	if (!game->texture_north)
+		exit_game("Error\nmalloc failed\n", game);
 	game->texture_north->img_text = NULL;
 	game->texture_south = malloc(sizeof(t_texture));
+	if (!game->texture_south)
+		exit_game("Error\nmalloc failed\n", game);
 	game->texture_south->img_text = NULL;
 	game->texture_east = malloc(sizeof(t_texture));
+	if (!game->texture_east)
+		exit_game("Error\nmalloc failed\n", game);
 	game->texture_east->img_text = NULL;
 	game->texture_west = malloc(sizeof(t_texture));
+	if (!game->texture_west)
+		exit_game("Error\nmalloc failed\n", game);
 	game->texture_west->img_text = NULL;
 	setup_wall_textures(game);
 }

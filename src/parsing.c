@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:18:51 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/23 04:48:07 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:28:18 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**get_map(char *str)
 	stock = NULL;
 	fd = open(str, O_RDONLY);
 	if (fd == -1)
-		return (write(1, "Error\nCan't read file\n", 22), NULL);
+		return (write(2, "Error\nCan't read file\n", 22), NULL);
 	while (1)
 	{
 		buff = get_next_line(fd);
@@ -52,8 +52,8 @@ void	check_extension(char *str, t_params *game)
 			&& str[size - 3] == 'c' && str[size - 4] == '.')
 			return ;
 	}
-	write(1, "Error\n", 6);
-	write(1, "Wrong extension\n", 16);
+	write(2, "Error\n", 6);
+	write(2, "Wrong extension\n", 16);
 	free(game);
 	exit(1);
 }
@@ -79,7 +79,7 @@ int	check_params_map(char **map)
 	while (map[i])
 	{
 		if ((!begin_line(map[i]) && !only_one(stock)) || var)
-			return (write(1, "Error\nElements mistake\n", 23), 0);
+			return (write(2, "Error\nElements mistake\n", 23), 0);
 		else if (map[i][0] == 'N' && map[i][1] == 'O' && map[i][2] == ' ')
 			count_stock_inc(&count, &stock[0]);
 		else if (map[i][0] == 'S' && map[i][1] == 'O' && map[i][2] == ' ')

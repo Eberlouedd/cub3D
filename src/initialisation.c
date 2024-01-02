@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 05:29:05 by kyacini           #+#    #+#             */
-/*   Updated: 2023/12/23 20:33:08 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:28:46 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ int	make_window(t_params *game)
 		mlx_destroy_image(game->mlx, game->main_img);
 	game->main_img = mlx_new_image(game->mlx, 600, 450);
 	if (!game->main_img)
-	{
 		exit_game("Error\nMain image creation failed\n", game);
-		exit(1);
-	}
 	game->img_data = (int *)mlx_get_data_addr(game->main_img,
 			&game->bits_per_pixel, &game->size_line, &game->endian);
 	process_raycasting(game);
