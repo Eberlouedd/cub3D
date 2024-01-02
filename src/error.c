@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 03:36:03 by kyacini           #+#    #+#             */
-/*   Updated: 2024/01/02 14:28:21 by kyacini          ###   ########.fr       */
+/*   Updated: 2024/01/02 15:13:47 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int	check_nl(char *str)
 		if (mem != '\n' && buff[0] == '\n')
 			num++;
 		if (buff[0] != '\n' && switcher)
-			return (write(2, "Error\nThe map need to be last\n", 30), 0);
+			return (write(2, "Error\nElements issue\n", 21), close(fd), 0);
 		mem = buff[0];
 	}
 	return (close(fd), 1);
